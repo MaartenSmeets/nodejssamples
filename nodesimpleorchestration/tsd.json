@@ -25,6 +25,12 @@
     },
     "express-serve-static-core/express-serve-static-core.d.ts": {
       "commit": "d969b903d1fce89a5e43828ec68458b4f852db4d"
+    },
+    "form-data/form-data.d.ts": {
+      "commit": "d969b903d1fce89a5e43828ec68458b4f852db4d"
+    },
+    "request/request.d.ts": {
+      "commit": "d969b903d1fce89a5e43828ec68458b4f852db4d"
     }
   }
 }

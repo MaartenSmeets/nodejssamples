@@ -4,7 +4,7 @@
   "description": "Sample of simple orchestration",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --debug-brk"
   },
   "author": "Maarten Smeets",
   "license": "ISC",
@@ -15,8 +15,6 @@
   "devDependencies": {
     "async": "^2.0.0-rc.2",
     "mocha": "^2.4.5",
-    "request": "^2.69.0",
-    "should": "^8.3.0",
-    "sinon": "^1.17.3"
+    "request": "^2.69.0"
   }
 }

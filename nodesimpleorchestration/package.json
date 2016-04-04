@@ -1,4 +1,4 @@
-	{
+{
   "name": "simpleorchestration",
   "version": "1.0.0",
   "description": "Sample of simple orchestration",
@@ -10,7 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.0",
-    "express": "^4.13.4",
-    "serve-static": "^1.10.2"
+    "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "async": "^2.0.0-rc.2",
+    "mocha": "^2.4.5",
+    "request": "^2.69.0",
+    "should": "^8.3.0",
+    "sinon": "^1.17.3"
   }
 }

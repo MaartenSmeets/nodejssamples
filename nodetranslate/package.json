@@ -1,22 +1,17 @@
 {
-  "name": "simpleorchestration",
+  "name": "translatesample",
   "version": "1.0.0",
-  "description": "Sample of simple orchestration",
-  "main": "app.js",
-  "scripts": {
-    "test": "mocha --debug-brk"
-  },
+  "description": "Sample of calling translation services",
+  "main": "app_2service.js",
   "author": "Maarten Smeets",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.15.0",
-    "express": "^4.13.4",
     "node-google-translate-skidz": "^0.1.1",
     "request": "^2.74.0"
   },
   "devDependencies": {
-    "async": "^2.0.0-rc.2",
-    "mocha": "^2.4.5",
-    "request": "^2.69.0"
+    "node-google-translate-skidz": "^0.1.1",
+	"async": "^2.0.0-rc.2",
+    "request": "^2.74.0"
   }
 }

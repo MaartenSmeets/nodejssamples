@@ -1,0 +1,8 @@
+{
+  "runtime":{
+    "majorVersion":"0.12"
+  },
+  "command": "node app_callback.js",
+  "release": {},
+  "notes": ""
+}

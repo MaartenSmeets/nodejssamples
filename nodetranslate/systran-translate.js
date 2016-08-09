@@ -1,6 +1,6 @@
 var request = require('request');
 var url = "https://api-platform.systran.net/translation/text/translate";
-var api_key = "8ca1f5e0-47eb-42a3-a9b4-3497ab6bbd0a";
+var api_key = "REQUEST YOUR OWN API KEY HERE https://platform.systran.net/freetrial";
 
 function translate(translateinput, callback) {
 	var data = {

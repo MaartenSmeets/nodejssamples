@@ -1,0 +1,24 @@
+{
+  "name": "helloworldservice",
+  "version": "1.0.0",
+  "description": "Sample of simple orchestration",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --debug-brk"
+  },
+  "author": "Maarten Smeets",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.0.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "fs": "0.0.2",
+    "should": "^8.3.0",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "async": "^2.0.0-rc.2",
+    "mocha": "^2.4.5",
+    "request": "^2.69.0"
+  }
+}

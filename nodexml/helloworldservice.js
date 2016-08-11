@@ -25,7 +25,7 @@ router.use(function timeLogStart(req, res, next) {
 router.get('/', function (req, res, next) {
     myutils.logger("GET");
     if (req.query.wsdl === "") {
-        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Type', 'application/xml');
         res.statusCode = 200;
         fs.readFile(servicewsdl, "utf8", function (err, data) {
             if (err) {

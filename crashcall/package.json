@@ -1,0 +1,11 @@
+{
+  "name": "crashme",
+  "version": "1.0.0",
+  "description": "Crash when called",
+  "main": "app.js",
+  "author": "Maarten Smeets",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}

@@ -40,7 +40,8 @@ var amisproxyserver = httpProxy.createProxyServer({
 var httpserver = http.createServer(function (req, res) {
 		console.log('Request on url: ' + req.url); // + ' with headers: ' + JSON.stringify(req.headers));
 		//http://localhost:PORT/oraclecloud/* is proxied to https://crashdummy6-accstrial.apaas.em2.oraclecloud.com/*
-		if (typeof req.url !== 'undefined') {
+		console.log(JSON.stringify(req.url));
+		if (typeof req.url !== 'undefined' && JSON.stringify(req.url) !== "\"/\"") {
 			if (req.url.startsWith("/oraclecloud")) {
 				req.url = req.url.replace(/^\/oraclecloud/, "/");
 				console.log('Proxying to oraclecloud');
@@ -56,7 +57,9 @@ var httpserver = http.createServer(function (req, res) {
 			} else {
 				res.end('No match found');
 			}
-		}
+		} else {
+      res.end('Invalid request');
+    }
 	});
 
 httpserver.listen(PORT);

@@ -2,7 +2,7 @@
   "runtime":{
     "majorVersion":"0.12"
   },
-  "command": "node app.js",
+  "command": "node --harmony app.js",
   "release": {},
   "notes": ""
 }

@@ -1,51 +1,70 @@
 var request = require('request');
 var async = require('async');
-
-function guid() {
-	return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-	s4() + '-' + s4() + s4() + s4();
-}
-
-function s4() {
-	return Math.floor((1 + Math.random()) * 0x10000)
-	.toString(16)
-	.substring(1);
-}
+var randomstring = require('randomstring');
+var cluster = require('cluster');
+var process = require('process');
+var pid = process.pid;
+var numCPUs = require('os').cpus().length;
 
 function logger(msg) {
 	console.log.apply(this, arguments);
-}
-var largemsg = '';
-//size in bytes
-for (i = 0; i < 1000000-4; i++) {
-	largemsg = largemsg + 'A';
 };
 
-var requestfunc = function doRequest(callback) {
-	var myguid = guid();
-	//logger('Request start: '+myguid);
-	var startTimeHR = process.hrtime();
-
-	request.post({
-		url : 'http://localhost:8401/test',
-		form: {'msg':largemsg}
-	}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			//logger(body); // Show the HTML for the Google homepage.
-			var durationHR = process.hrtime(startTimeHR);
-			logger("Request end. Duration: %ds %dms", durationHR[0], durationHR[1] / 1000000);
-			callback();
-		} else {
-			logger('Error! ' + JSON.stringify(error));
-			callback();
-		}
+if (cluster.isMaster) {
+	for (var i = 0; i < numCPUs; i++) {
+		logger(pid+"\tMaster: creating fork: "+i);
+		cluster.fork();
+	};
+	
+	cluster.on('exit',(worker,code,signal) => {
+		logger(pid+"\tWorker dies");
 	});
-};
+	
+	cluster.on('online',(worker,code,signal) => {
+		logger(pid+"\tWorker started");
+	});
+} else {
+	var largemsg = '';
+	//size in bytes
+	logger(pid+"\tGenerating message");
+	for (i = 0; i < 1000000; i++) {
+		largemsg = largemsg + randomstring.generate({
+				length : 1,
+				charset : 'alphabetic'
+			});
+	};
+	var sendmsg = {
+		'msg' : largemsg
+	};
 
-var requests = [];
+	logger(pid+"\tGenerating request function");
+	var requestfunc = function doRequest(callback) {
+		var startTimeHR = process.hrtime();
 
-for (i = 0; i < 1000000; i++) {
-	requests.push(requestfunc);
-};
+		request.post({
+			url : 'http://localhost:8401/test',
+			form : {
+				'msg' : sendmsg
+			}
+		}, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				var durationHR = process.hrtime(startTimeHR);
+				logger(pid+"\tRequest end. Duration in ms:\t%d", (durationHR[0]*1000)+(durationHR[1] / 1000000));
+				callback();
+			} else {
+				logger(pid+"\tError! " + JSON.stringify(error));
+				callback();
+			}
+		});
+	};
 
-async.series(requests);
+	var requests = [];
+
+	logger(pid+"\tCreating array of functions");
+	for (i = 0; i < 1000000; i++) {
+		requests.push(requestfunc);
+	};
+
+	logger(pid+"\tExecuting functions in serie");
+	async.series(requests);
+}

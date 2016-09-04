@@ -1,0 +1,15 @@
+{
+  "name": "async_sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app_async.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.0.1",
+    "fs-readfile-promise": "^3.0.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name" : "weather",
+  "version" : "1.0.0",
+  "description" : "Weather API",
+  "main" : "weather.js",
+  "oracleMobile" : {
+    "dependencies" : {
+      "apis" : { },
+      "connectors" : { "/mobile/connector/openweathermap": "1.0" }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+#%RAML 0.8
+title: weather
+version: 1.0
+baseUri: /mobile/custom/weatherapi1
+protocols: [HTTPS]
+mediaType: "application/json"
+/:
+  get:
+    displayName: Get weather data
+    description: |
+      Get weather data
+      
+    protocols: [HTTPS]
+    queryParameters:
+      q:
+        displayName: Location
+        type: string
+        example: |
+          Groningen,NL
+          
+        required: true

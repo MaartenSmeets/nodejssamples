@@ -21,7 +21,7 @@ module.exports = function (service) {
 		var sdk=req.oracleMobile;
 		var queryObject = {};
 		queryObject.q = req.query.q;
-		queryObject.APPID='39fe02a181a0136ca530a00034577ab9'
+		queryObject.APPID='xxx'
 		
 		sdk.connectors.get("openweathermap", null,{ qs: queryObject }).then(
 			function (result) {
@@ -30,7 +30,7 @@ module.exports = function (service) {
 					res.setHeader('Content-Type', 'application/json');
 					var parsedObject = eval("(" + result.result + ")");
 					var temp = parsedObject.main.temp - 273.15; //converting Kelvin to Celcius
-					var sendback = JSON.stringify({ "result":tempc });
+					var sendback = JSON.stringify({ "result":temp });
 					res.end(sendback);
 				} catch (err) {
 					console.warn('Exception: '+JSON.stringify(err));

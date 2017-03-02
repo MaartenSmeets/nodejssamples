@@ -1,0 +1,12 @@
+{
+  "name" : "helloworld",
+  "version" : "1.1.0",
+  "description" : "HelloWorld",
+  "main" : "helloworld.js",
+  "oracleMobile" : {
+    "dependencies" : {
+      "apis" : { },
+      "connectors" : { "/mobile/connector/HelloWorldSOAPConn": "1.0" }
+    }
+  }
+}

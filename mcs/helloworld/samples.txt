@@ -1,0 +1,269 @@
+/**
+ * This file contains a selection of Oracle MCS custom code examples
+ */
+
+
+/**
+ *  Simple Example
+ *  Log at several levels and return a simple javascript object
+ */
+service.get('/mobile/custom/myapi/helloWorld', function(req,res) {
+	// Logging
+	console.info("info log message");
+	console.severe("severe log message");
+	console.fine("fine log message");
+	//a sample object
+	var item1 = {"id": 1,"title": "Test Item 1"};
+	// Send our item with http status code 200
+	res.send(200, item1);
+
+});
+
+/**
+ *  Offline Support
+ *  Format your response to make data available offline when using Oracle's
+ *  Sync Client SDK.
+ *  Note the use of the sync sdk, which is found in req.oracleMobile.  The
+ *  sdk.sync object provides
+ *  a set of functions for offline support.  Examples below.
+ */
+service.get('/mobile/custom/myapi/Sync', function(req,res) {
+	sdk = req.oracleMobile;
+
+	//a sample object
+	var item1 = {"id": 1,"title": "Test Item 1"};
+	
+	// If your result is a collection, use this syntax.
+	// Parameters are the res parameters passed to this function, the uri
+	// of the item,
+	// and the Etag of the item.
+	sdk.sync.addItem(res, item1, '/items/1', '1');
+	// for collections, you currently should set this header
+        res.setHeader('Oracle-Mobile-Sync-Resource-Type', 'collection'); 
+
+	//For single results, substitute this line:
+	//sdk.sync.setItem(res, item1);
+        // for single results, you should also set this header,
+        // res.setHeader('Oracle-Mobile-Sync-Resource-Type', 'item');
+ 	
+	//Set an offline cache timeout for the object:
+	res.setHeader('Oracle-Mobile-Sync-Expires', 'Mon, 05 May 2014 14:46:43
+GMT');
+	
+	// To disable offline access to the response object add this line:
+	// res.setHeader('Oracle-Mobile-Sync-No-Store', true);
+	
+	res.end();
+});
+
+/*
+ *  ----  Service Invocation ---- 
+ * 
+ *  This section shows examples of simple service invocations.
+ *
+ *  First, here are explanations of some of the code that is common for
+ *  all examples as well as some common code to use in all examples.
+ *
+ *  Service invocation happens using a promised-based URI using the Node.js
+ *  Bluebird module.
+ *  Under the covers, those calls use the Node.js Request module to make a
+ *  REST request to MCS and
+ *  return the results.
+ *
+ *  All service calls follow the following format:
+ *
+ *  <namespace>.<functionName>(requiredArguments*, optionalArguments,
+ *  httpOptions)
+ *
+ *  - namespace defines what API is being called, e.g. oracleMobile.storage or
+ *  oracleMobile.connectors
+ *  - functionName defines the operation, e.g. getById or post
+ *  - There are 0 or more required arguments for each function,  e.g.
+ *  tableName, id
+ *  - optionalArguments is a JavaScript object that holds all the optional
+ *  arguments.
+ *      - It is a map where the key is the name of the optional argument and
+ *      the value is the value of the argument.  
+ *      - The list of optional arguments that we support is comprised of a few
+ *      generally available arguments and a list of API specific arguments.
+ *        E.g. {inputType: 'stream', outputType: 'stream', accept:
+ *        'image/json'}
+ *      - If you provide an optional argument that is not supported by a
+ *      particular API, it is be ignored.
+ *      - See our documentation for the list of arguments for each function.
+ *  - httpOptions allows you to provide a default list of options to be used
+ *  in the REST call made by the underlying code.
+ *       - Any value provided in optionalArguments that affects a parameter
+ *       given in httpOptions overrides that parameter.
+ *       - See the documentation for the Request node.js module for more
+ *       information about these parameters.
+ *  - As with all JavaScript calls, it is legal to omit trailing arguments
+ *  and, if you do, they are treated as null
+ *    So, for many calls, only the requiredArguments object needs to be
+ *    specified.
+ * 
+ * The return value for every call is a promise (for more information see the
+ * bluebird documentation).
+ * To get the return value, you implement two callback methods and provide
+ * them as arguments to a call to a function named then.
+ * 
+ * For example, 
+ * oracleMobile.storage.getCollections(opts).then(
+ *    function(successResult){
+ *        var result = successResult.result;
+ *        // processing here
+ *    },
+ *    function(failureResult){
+ *        var error = failureResult.error;
+ *        // process failure here
+ *    }
+ *  }
+ *
+ *  The first function is invoked if the call is successful.  The second is
+ *  invoked if it fails.
+ *
+ * For more details about the contents of successResult and failureResult, see
+ * the documentation.
+ */
+
+/**
+ *  ----  Service Invocation Examples ----
+ *  Here are examples of how to invoke various MCS REST APIs.
+ */ 
+
+
+/**
+ *  Call Custom API
+ *  This example calls another custom API, which is called
+ *  '/mobile/custom/IncidentReportsAPI',
+ *  and does a POST on the 'incidents' resource within it.
+ *  Note: To call the API this way, the dependency on IncidentReportsAPI must
+ *  be specified in package.json.
+ */
+service.get('/mobile/custom/myapi/CustomCode', function(req,res) {
+
+	var payload="{"id" : 1}";
+
+	req.oracleMobile.custom.IncidentReportsAPI.post("incidents", payload,
+{inType: 'json'}).then(
+		function(result){
+			res.send(result.statusCode, result.result);
+		},
+		function(error){
+			res.send(500, error.error);
+		}
+	);
+});
+
+/**
+ *  Call a connector
+ *  The following example calls out to a REST connector named
+ *  '/mobile/connector/MyRESTConnector'.
+ *  It hits the resource 'resourceName' on that connector and adds query
+ *  parameters to the call.
+ *  Note: To call the API this way, the dependency on IncidentReportsAPI must
+ *  be specified in package.json.
+ *  Calls to other types of connectors follow the same pattern.
+ */
+service.get('/mobile/custom/myapi/RestConnector', function(req,res) {
+	// build an object to describe the query parameters for the call
+	var queryObject={};
+	queryObject.param1='param1';
+	queryObject.param2= param2';
+
+	req.oracleMobile.connectors.MyRESTConnector.get("resourceName", null,
+{qs: queryObject}).then(
+		function(result){
+			res.send(result.statusCode, result.result);
+		},
+		function(error){
+			res.send(500, error.error);
+		}
+	);
+});
+
+/**
+ *  Call Analytics API
+ *  The following example posts an event to our analytics platform API.
+ */
+service.get('/mobile/custom/myapi/Analytics', function(req,res) {
+
+	// Events are posted as an array
+	var events = [];
+	var timestamp = (new Date()).toISOString();
+
+	// The first element in your array always gives context
+	events[0] = {name:"context", type:"system", timestamp:timestamp,
+			properties:{
+				userName: "myusername"
+			}
+		};
+	// The rest of the events in the array are custom events that you
+	// define.  This is an example
+	events[1] = {name: "EventName", timestamp: timestamp, properties: {
+property1: "property1", property2: "property2"} };
+
+	req.oracleMobile.analytics.postEvent(events).then(
+		function(result){
+			res.send(result.statusCode, result.result);
+		},
+		function(error){
+			res.send(500, error.error);
+		}
+	);
+});
+
+
+
+/**
+ *  Get information about the current user.
+ */
+service.get('/mobile/custom/myapi/ums', function(req,res) {
+
+	req.oracleMobile.ums.getUser().then(
+		function(result){
+			res.send(result.statusCode, result.result);
+		},
+		function(error){
+			res.send(500, error.error);
+		}
+	);
+});
+
+
+/**
+ *  Retrieve the contents of a storage collection called 'coll1'
+ */
+service.get('/mobile/custom/myapi/storage', function(req,res) {
+	req.oracleMobile.storage.getAll('coll1').then(
+		function(result){
+			res.send(result.statusCode, result.result);
+		},
+		function(error){
+			res.send(500, error.error);
+		}
+	);
+});
+
+
+/**
+ *  Send a notification
+ */
+service.post('/mobile/custom/myapi/Notifications', function(req,res) {
+	var notification = {message: 'Message'};
+
+	var context = {
+		mbe: 'MyMBE',
+		version: '1.0'
+	}
+	
+	req.oracleMobile.notification.post(notification, context).then(
+		function(result){
+			res.send(result.statusCode, result.result);
+		},
+		function(error){
+			res.send(500, error.error);
+		}
+	);
+});
+

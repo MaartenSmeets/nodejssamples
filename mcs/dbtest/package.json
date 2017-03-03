@@ -1,0 +1,12 @@
+{
+  "name" : "dbtest",
+  "version" : "1.0.0",
+  "description" : "Parameters API",
+  "main" : "dbtest.js",
+  "oracleMobile" : {
+    "dependencies" : {
+      "apis" : { },
+      "connectors" : { }
+    }
+  }
+}

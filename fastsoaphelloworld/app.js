@@ -25,9 +25,11 @@ app.use('/soap/helloworld', soap({
         Hello_Service: { /* Ports */
             Hello_Port: { /* Methods */
                 sayHello: function(args, callback, headers, req) {
-                    return {
-                        greeting: 'Hello ' + args.firstName.$value
-                    };
+                    setTimeout(function() {
+                        callback({
+                            greeting: 'Hello ' + args.firstName.$value
+                        })
+                    }, 1000);
                 }
             }
         }
